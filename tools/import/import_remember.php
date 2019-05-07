@@ -10,7 +10,7 @@ require_once dirname(__FILE__) . '/../../settings.php';
 require_once OPENLIST_CLASSES_PATH . '/Dev.php';
 require_once OPENLIST_CLASSES_PATH . '/DB.php';
 
-if (!drupal_is_cli()) {
+if (!php_sapi_name() == 'cli') {
   import_log("Run from CLI plz");
   exit;
 }
@@ -45,11 +45,14 @@ function do_import($filename) {
   }
 
   while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-    $patronid = $data[1];
+    $patronid = trim($data[1]);
     $record = $data[2];
 
     // Skip bad patron ids
-    if (!is_numeric($patronid)) { continue; }     
+    if (!is_numeric($patronid)) { 
+      import_log("Skipping $patronid");
+      continue; 
+    }     
 //    if ($patronid != "13736499") { continue; }
 
     // Import the single record
