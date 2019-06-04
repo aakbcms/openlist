@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Openlist tools area"
+AuthUserFile openlist_tool_users
+Require valid-user
